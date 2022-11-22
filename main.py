@@ -43,6 +43,7 @@ def guestID():
     ID = f'{random.randrange(1, 10**6):03}'
     if ID in used:
       guestID()
+    break
   used.append(ID)
   return ID
 
@@ -105,7 +106,7 @@ def signup():
     elif not any(c.isalnum() for c in usern):
       print('Your password must contain at least one digit')
       continue
-    elif len(passw) > 6:
+    elif len(passw) < 6:
       print('Your password must be 6 characters or more')
       continue
     verifyPassw = input('Verify your password: ')
@@ -116,7 +117,7 @@ def signup():
       break
 
   passw.encode()
-  hashed = bcrypt.hashpw(passw, bcrypt.gensalt(rounds = 13))
+  hashed = bcrypt.hashpw(passw.encode(), bcrypt.gensalt(rounds = 13))
   connection = sqlite3.connect('users.db')
   c = connection.cursor()
   c.execute("INSERT INTO users VALUES (?, ?, ?)", (
